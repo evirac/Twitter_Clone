@@ -1,3 +1,5 @@
+@import "Variables.scss";
+
 .home {
   padding: 20px 20px 0 250px;
 
@@ -15,13 +17,14 @@
     margin-top: 10px;
   }
 
-  .image-preview-container {
-    max-height: 300px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+}
+
+.image-preview-container {
+  max-height: 300px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   .tweet-image-preview {
     max-width: 100%;

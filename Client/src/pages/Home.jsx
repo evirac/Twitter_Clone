@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 import { FaImage } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

@@ -1,6 +1,7 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { FaHome, FaHashtag, FaBell, FaUser, FaSignOutAlt } from 'react-icons/fa';
-import Image from "react-bootstrap/Image";
+import Image from 'react-bootstrap/Image';
 import '../sass/Sidebar.scss';
 
 const Sidebar = () => {
@@ -10,11 +11,11 @@ const Sidebar = () => {
         <Image src='assets/logo.svg' className="sidebar-logo" />
       </div>
       <div className="sidebar-menu">
-        <SidebarItem icon={<FaHome />} text="Home" active />
-        <SidebarItem icon={<FaHashtag />} text="Explore" />
-        <SidebarItem icon={<FaBell />} text="Notifications" />
-        <SidebarItem icon={<FaUser />} text="Profile" />
-        <SidebarItem icon={<FaSignOutAlt />} text="Logout" />
+        <SidebarItem icon={<FaHome />} text="Home" to="/" />
+        <SidebarItem icon={<FaHashtag />} text="Explore" to="/explore" />
+        <SidebarItem icon={<FaBell />} text="Notifications" to="/notifications" />
+        <SidebarItem icon={<FaUser />} text="Profile" to="/profile" />
+        <SidebarItem icon={<FaSignOutAlt />} text="Logout" to="/logout" />
       </div>
       <div className="sidebar-footer">
         <SidebarProfile />
@@ -23,12 +24,12 @@ const Sidebar = () => {
   );
 };
 
-const SidebarItem = ({ icon, text, active }) => {
+const SidebarItem = ({ icon, text, to }) => {
   return (
-    <div className={`sidebar-item ${active ? 'active' : ''}`}>
+    <NavLink to={to} className="sidebar-item" activeClassName="active">
       {icon}
       <span>{text}</span>
-    </div>
+    </NavLink>
   );
 };
 
