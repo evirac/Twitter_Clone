@@ -1,11 +1,6 @@
 @import './Sidebar.scss';
 @import './Variables.scss';
 
-$primary-color: #1d9bf0;
-
-svg.logo{
-  color: $primary-color;
-}
 .app {
   display: flex;
 }

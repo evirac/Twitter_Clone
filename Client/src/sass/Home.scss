@@ -7,7 +7,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
     border-bottom: 1px solid $border;
 
     h2{
@@ -22,6 +21,12 @@
     margin-top: 10px;
   }
 
+}
+
+.tweet{
+  border-bottom: 1px solid $border;
+  border-right: 1px solid $border;
+  margin-bottom: 0px;
 }
 
 .image-preview-container {
