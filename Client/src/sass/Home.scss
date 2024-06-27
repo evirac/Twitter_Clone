@@ -8,6 +8,11 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    border-bottom: 1px solid $border;
+
+    h2{
+      margin-left: 10px;
+    }
   }
 
   .tweet-image {

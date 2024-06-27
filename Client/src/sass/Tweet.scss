@@ -1,9 +1,14 @@
+@import "Variables.scss";
+
 .tweet {
-    margin-left: 10px;
-    border-bottom: 1px solid #e1e8ed;
-    padding: 10px 0;
+    margin-left: 0px;
+    padding: 10px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
+    border-bottom: 1px solid $border;
+    border-right: 1px solid $border;
+    margin-bottom: 0px;
   
     .tweet-header {
       display: flex;
@@ -70,10 +75,15 @@
       .tweet-icon {
         cursor: pointer;
         color: #657786;
-        transition: color 0.2s;
-  
+        transition: color 0.3s ease-in-out;  
         &:hover {
           color: #1da1f2;
+        }
+        &.hearted{
+          color: red;
+        }
+        &.retweeted{
+          color: green;
         }
       }
     }

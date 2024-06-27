@@ -26,7 +26,7 @@ const Sidebar = () => {
 
 const SidebarItem = ({ icon, text, to }) => {
   return (
-    <NavLink to={to} className="sidebar-item" activeClassName="active">
+    <NavLink to={to} className="sidebar-item">
       {icon}
       <span>{text}</span>
     </NavLink>

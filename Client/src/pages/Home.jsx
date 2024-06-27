@@ -15,6 +15,7 @@ const Home = () => {
   const [tweets, setTweets] = useState([
     {
       id: 1,
+      name: 'ashwin',
       profilePic: 'https://via.placeholder.com/40',
       handle: '@ashwinravi99',
       date: '11h',
@@ -23,6 +24,7 @@ const Home = () => {
     },
     {
       id: 2,
+      name: 'gaurav',
       profilePic: 'https://via.placeholder.com/40',
       handle: '@user2',
       date: 'Jun 24',
@@ -41,6 +43,7 @@ const Home = () => {
     const newTweet = {
       id: tweets.length + 1,
       profilePic: 'https://via.placeholder.com/40',
+      name: 'newuser',
       handle: '@newuser',
       date: 'Now',
       content: tweetText,
