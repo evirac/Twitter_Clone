@@ -39,6 +39,8 @@
   border-radius: 20px;
   padding-left: 10px;
   padding-right: 10px;
+  color: lighten(black,15%);
+  text-decoration: none;
 
   &.active {
     background-color: lighten($twitter-blue,20%);
