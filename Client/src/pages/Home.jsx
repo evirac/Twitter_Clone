@@ -60,7 +60,7 @@ const Home = () => {
     <div className="home">
       <div className="home-header">
         <h2>Home</h2>
-        <Button variant="primary" onClick={handleShow}>
+        <Button className='me-2' variant="primary" onClick={handleShow}>
           Tweet
         </Button>
       </div>

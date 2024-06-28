@@ -1,7 +1,7 @@
 @import "Variables.scss";
 
 .home {
-  padding: 20px 20px 0 250px;
+  // padding: 20px 20px 0 250px;
 
   .home-header {
     display: flex;
@@ -25,8 +25,6 @@
 
 .tweet{
   border-bottom: 1px solid $border;
-  border-right: 1px solid $border;
-  margin-bottom: 0px;
 }
 
 .image-preview-container {
