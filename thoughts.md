@@ -1,0 +1,1 @@
+I'll add joined date and tweeted date as well to schema because that'll accurately show information

@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../redux/AuthSlice';
 import { Link } from 'react-router-dom';
 import Image from "react-bootstrap/Image";
 import '../sass/Auth.scss'; 
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector((state) => state.auth);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(login({ email, password }));
+  };
+
   return (
     <div className="auth-page">
       <div className="auth-card">
@@ -12,11 +24,26 @@ const Login = () => {
           <h2>Welcome back</h2>
         </div>
         <div className="auth-form">
-          <form>
-            <input type="text" placeholder="Username" required />
-            <input type="password" placeholder="Password" required />
-            <button type="submit" className="auth-button">Login</button>
+          <form onSubmit={handleSubmit}>
+            <input 
+              type="email" 
+              placeholder="Email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required 
+            />
+            <input 
+              type="password" 
+              placeholder="Password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required 
+            />
+            <button type="submit" className="auth-button" disabled={isLoading}>
+              {isLoading ? 'Logging in...' : 'Login'}
+            </button>
           </form>
+          {error && <p className="error">{error}</p>}
           <p>
             Don't have an account? <Link to="/register">Sign up</Link>
           </p>
