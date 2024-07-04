@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaHome, FaHashtag, FaBell, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import Image from 'react-bootstrap/Image';
 import '../sass/Sidebar.scss';
+import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <Image src='assets/logo.svg' className="sidebar-logo" />
+        <Image src="assets/logo.svg" className="sidebar-logo" />
       </div>
       <div className="sidebar-menu">
         <SidebarItem icon={<FaHome />} text="Home" to="/" />
@@ -34,12 +36,33 @@ const SidebarItem = ({ icon, text, to }) => {
 };
 
 const SidebarProfile = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${API_URL}/users/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(response.data);
+      } catch (err) {
+        console.error('Failed to fetch user data', err);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  if (!user) {
+    return <div></div>;
+  }
+
   return (
     <div className="sidebar-profile">
-      <img src="https://via.placeholder.com/40" alt="Profile" />
+      <img src={`${API_URL}/${user.profilePic}` || "https://via.placeholder.com/40"} alt="Profile" />
       <div className="profile-info">
-        <div className="profile-name">User Name</div>
-        <div className="profile-username">@username</div>
+        <div className="profile-name">{user.name}</div>
+        <div className="profile-username">@{user.username}</div>
       </div>
     </div>
   );

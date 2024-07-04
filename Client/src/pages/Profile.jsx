@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaCalendarAlt, FaMapMarkerAlt, FaBirthdayCake } from 'react-icons/fa';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
@@ -7,29 +7,12 @@ import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import '../sass/Profile.scss';
 import Tweet from '../components/Tweet';
+import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Profile = () => {
-  const userTweets = [
-    {
-      id: 1,
-      name: 'User Name',
-      profilePic: 'https://via.placeholder.com/40',
-      handle: '@username',
-      date: '1h',
-      content: 'This is a sample tweet by the user.',
-      image: 'https://via.placeholder.com/600x200',
-    },
-    {
-      id: 2,
-      name: 'User Name',
-      profilePic: 'https://via.placeholder.com/40',
-      handle: '@username',
-      date: 'Jun 24',
-      content: 'Another sample tweet by the user.',
-      image: '',
-    },
-  ];
-
+  const [user, setUser] = useState(null);
+  const [userTweets, setUserTweets] = useState([]);
   const [showEditDetailsModal, setShowEditDetailsModal] = useState(false);
   const [showUploadProfilePicModal, setShowUploadProfilePicModal] = useState(false);
   const [name, setName] = useState('');
@@ -37,7 +20,39 @@ const Profile = () => {
   const [location, setLocation] = useState('');
   const [errors, setErrors] = useState({});
 
-  const handleEditDetails = () => {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/users/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUser(response.data);
+        setName(response.data.name);
+        setDob(response.data.dob);
+        setLocation(response.data.location);
+      } catch (err) {
+        console.error('Failed to fetch user profile', err);
+      }
+    };
+
+    const fetchUserTweets = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/tweets/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUserTweets(response.data);
+      } catch (err) {
+        console.error('Failed to fetch user tweets', err);
+      }
+    };
+
+    fetchUserProfile();
+    fetchUserTweets();
+  }, []);
+
+  const handleEditDetails = async () => {
     const newErrors = {};
     if (!name) newErrors.name = 'Name is required';
     if (!dob) newErrors.dob = 'Date of Birth is required';
@@ -46,15 +61,53 @@ const Profile = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      // Handle updating details logic here
-      setShowEditDetailsModal(false);
+      try {
+        const updatedUser = { name, dob, location };
+        const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+
+        await axios.put(`${API_URL}/users/profile`, updatedUser, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser({ ...user, ...updatedUser });
+        setShowEditDetailsModal(false);
+      } catch (err) {
+        console.error('Failed to update user details', err);
+      }
     }
   };
 
-  const handleUploadProfilePic = () => {
-    // Handle profile picture upload logic here
-    setShowUploadProfilePicModal(false);
+  const handleUploadProfilePic = async (e) => {
+    const formData = new FormData();
+    formData.append('profilePic', e.target.files[0]);
+    const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+  
+    try {
+      const response = await axios.put(`${API_URL}/users/profile/pic`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.data.profilePic) {
+        setUser({ ...user, profilePic: response.data.profilePic });
+      } else {
+        console.error('Profile picture upload failed.');
+      }
+    } catch (err) {
+      console.error('Failed to upload profile picture', err);
+    } finally {
+      setShowUploadProfilePicModal(false); // Move this here to ensure it closes only after upload attempt
+    }
   };
+  
+
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="profile-page">
@@ -62,7 +115,7 @@ const Profile = () => {
       <div className="profile-cover">
         <div className="profile-header">
           <Image
-            src="https://via.placeholder.com/150"
+            src={`${API_URL}/${user.profilePic}` || "https://via.placeholder.com/150"}
             roundedCircle
             className="profile-pic"
           />
@@ -73,26 +126,27 @@ const Profile = () => {
         </div>
       </div>
       <div className="profile-details">
-        <h2 className="profile-name">User Name</h2>
-        <div className="profile-handle">@username</div>
+        <h2 className="profile-name">{user.name}</h2>
+        <div className="profile-handle">@{user.username}</div>
         <div className="profile-info">
-          <div><FaBirthdayCake /> Date of Birth: January 1, 2000</div>
-          <div><FaCalendarAlt /> Joined: June 2021</div>
-          <div><FaMapMarkerAlt /> Location: City, Country</div>
+          <div><FaBirthdayCake /> Date of Birth: {user.dob}</div>
+          <div><FaCalendarAlt /> Joined: {user.joined}</div>
+          <div><FaMapMarkerAlt /> Location: {user.location}</div>
         </div>
         <div className="profile-follow-stats">
-          <span>100 Following</span>
-          <span>200 Followers</span>
+          <span>{user.following.length} Following</span>
+          <span>{user.followers.length} Followers</span>
         </div>
       </div>
       <div className="profile-tweets">
         <h3>Tweets & Replies</h3>
         {userTweets.map((tweet) => (
-          <Tweet key={tweet.id} {...tweet} />
+          <Tweet key={tweet._id} {...tweet} />
         ))}
       </div>
-       {/* Edit Details Modal */}
-       <Modal show={showEditDetailsModal} onHide={() => setShowEditDetailsModal(false)}>
+
+      {/* Edit Details Modal */}
+      <Modal show={showEditDetailsModal} onHide={() => setShowEditDetailsModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Details</Modal.Title>
         </Modal.Header>
@@ -152,7 +206,7 @@ const Profile = () => {
           <Form>
             <Form.Group controlId="formProfilePic">
               <Form.Label>Profile Picture</Form.Label>
-              <Form.Control type="file" />
+              <Form.Control type="file" onChange={handleUploadProfilePic} />
             </Form.Group>
           </Form>
         </Modal.Body>
