@@ -82,7 +82,7 @@ const Profile = () => {
     const formData = new FormData();
     formData.append('profilePic', e.target.files[0]);
     const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
-  
+
     try {
       const response = await axios.put(`${API_URL}/users/profile/pic`, formData, {
         headers: {
@@ -90,7 +90,7 @@ const Profile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (response.data.profilePic) {
         setUser({ ...user, profilePic: response.data.profilePic });
       } else {
@@ -102,12 +102,12 @@ const Profile = () => {
       setShowUploadProfilePicModal(false); // Move this here to ensure it closes only after upload attempt
     }
   };
-  
-
 
   if (!user) {
     return <div>Loading...</div>;
   }
+
+  const profilePicUrl = user.profilePic ? `${API_URL}/${user.profilePic}` : "/assets/default_user.jpg";
 
   return (
     <div className="profile-page">
@@ -115,7 +115,7 @@ const Profile = () => {
       <div className="profile-cover">
         <div className="profile-header">
           <Image
-            src={`${API_URL}/${user.profilePic}` || "https://via.placeholder.com/150"}
+            src={profilePicUrl}
             roundedCircle
             className="profile-pic"
           />
@@ -140,9 +140,15 @@ const Profile = () => {
       </div>
       <div className="profile-tweets">
         <h3>Tweets & Replies</h3>
-        {userTweets.map((tweet) => (
-          <Tweet key={tweet._id} {...tweet} />
-        ))}
+        {userTweets.length === 0 ? (
+          <div className="no-tweets-info">
+            <p>You haven't posted any tweets yet.</p>
+          </div>
+        ) : (
+          userTweets.map((tweet) => (
+            <Tweet key={tweet._id} {...tweet} />
+          ))
+        )}
       </div>
 
       {/* Edit Details Modal */}

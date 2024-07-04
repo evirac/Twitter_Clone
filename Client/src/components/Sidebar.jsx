@@ -67,10 +67,11 @@ const SidebarProfile = () => {
   if (!user) {
     return <div></div>;
   }
+  const profilePicUrl = user.profilePic ? `${API_URL}/${user.profilePic}` : "/assets/default_user.jpg";
 
   return (
     <div className="sidebar-profile">
-      <img src={`${API_URL}/${user.profilePic}` || "https://via.placeholder.com/40"} alt="Profile" />
+      <img src={profilePicUrl} alt="Profile" />
       <div className="profile-info">
         <div className="profile-name">{user.name}</div>
         <div className="profile-username">@{user.username}</div>

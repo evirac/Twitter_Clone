@@ -1,22 +1,39 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
 const Tweet = require('../models/tweet_model');
 const { protect } = require('../middleware/auth');
 
-// Post a tweet
-router.post('/', protect, async (req, res) => {
-  const { content, image } = req.body;
+// Set up multer for file storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+const upload = multer({ storage: storage });
 
+// Create a new tweet
+router.post('/', protect, upload.single('image'), async (req, res) => {
   try {
-    const tweet = await Tweet.create({
-      tweetedBy: req.user._id,
+    const { content } = req.body;
+    const image = req.file ? req.file.path : null;
+
+    const newTweet = new Tweet({
       content,
       image,
+      tweetedBy: req.user._id,
     });
 
-    res.status(201).json(tweet);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    await newTweet.save();
+
+    res.status(201).json(newTweet);
+  } catch (err) {
+    console.error('Error posting tweet:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
