@@ -1,3 +1,4 @@
+// src/main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
@@ -9,6 +10,7 @@ import Error from './pages/Error.jsx';
 import App from './App';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -18,28 +20,28 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: <ProtectedRoute element={Home} />,
       },
       {
         path: 'explore',
-        element: <Explore />,
+        element: <ProtectedRoute element={Explore} />,
       },
       {
         path: 'profile',
-        element: <Profile />,
+        element: <ProtectedRoute element={Profile} />,
       },
       {
         path: '/login',
-        element: <Login />
+        element: <Login />,
       },
       {
         path: '/register',
-        element: <Register />
+        element: <Register />,
       },
       {
         path: '/explore',
-        element: <Explore />
-      }
+        element: <ProtectedRoute element={Explore} />,
+      },
     ],
   },
 ]);

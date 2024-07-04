@@ -1,5 +1,6 @@
+// src/components/Sidebar.jsx
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FaHome, FaHashtag, FaBell, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import Image from 'react-bootstrap/Image';
 import '../sass/Sidebar.scss';
@@ -7,6 +8,13 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -17,7 +25,10 @@ const Sidebar = () => {
         <SidebarItem icon={<FaHashtag />} text="Explore" to="/explore" />
         <SidebarItem icon={<FaBell />} text="Notifications" to="/notifications" />
         <SidebarItem icon={<FaUser />} text="Profile" to="/profile" />
-        <SidebarItem icon={<FaSignOutAlt />} text="Logout" to="/logout" />
+        <div className="sidebar-item" onClick={handleLogout}>
+          <FaSignOutAlt />
+          <span>Logout</span>
+        </div>
       </div>
       <div className="sidebar-footer">
         <SidebarProfile />
