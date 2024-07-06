@@ -23,7 +23,7 @@ const Sidebar = () => {
       <div className="sidebar-menu">
         <SidebarItem icon={<FaHome />} text="Home" to="/" />
         <SidebarItem icon={<FaHashtag />} text="Explore" to="/explore" />
-        <SidebarItem icon={<FaBell />} text="Notifications" to="/notifications" />
+        {/* <SidebarItem icon={<FaBell />} text="Notifications" to="/notifications" /> */}
         <SidebarItem icon={<FaUser />} text="Profile" to="/profile" />
         <div className="sidebar-item" onClick={handleLogout}>
           <FaSignOutAlt />

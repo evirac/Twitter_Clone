@@ -8,6 +8,7 @@ import Alert from 'react-bootstrap/Alert';
 import '../sass/Profile.scss';
 import Tweet from '../components/Tweet';
 import axios from 'axios';
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Profile = () => {
@@ -32,14 +33,15 @@ const Profile = () => {
         setName(response.data.name);
         setDob(response.data.dob);
         setLocation(response.data.location);
+        fetchUserTweets(response.data._id); // Fetch tweets after fetching user profile
       } catch (err) {
         console.error('Failed to fetch user profile', err);
       }
     };
 
-    const fetchUserTweets = async () => {
+    const fetchUserTweets = async (userId) => {
       try {
-        const response = await axios.get(`${API_URL}/tweets/user`, {
+        const response = await axios.get(`${API_URL}/tweets/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserTweets(response.data);
@@ -49,7 +51,6 @@ const Profile = () => {
     };
 
     fetchUserProfile();
-    fetchUserTweets();
   }, []);
 
   const handleEditDetails = async () => {
@@ -212,16 +213,13 @@ const Profile = () => {
           <Form>
             <Form.Group controlId="formProfilePic">
               <Form.Label>Profile Picture</Form.Label>
-              <Form.Control type="file" onChange={handleUploadProfilePic} />
+              <Form.Control type="file" accept="image/*" onChange={handleUploadProfilePic} />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowUploadProfilePicModal(false)}>
             Cancel
-          </Button>
-          <Button variant="primary" onClick={handleUploadProfilePic}>
-            Upload
           </Button>
         </Modal.Footer>
       </Modal>

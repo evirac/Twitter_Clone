@@ -10,7 +10,6 @@ import '../sass/Home.scss';
 import Tweet from '../components/Tweet';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [newTweetContent, setNewTweetContent] = useState('');
@@ -41,7 +40,7 @@ const Home = () => {
     if (newTweetImage) {
       formData.append('image', newTweetImage);
     }
-    const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+    const token = localStorage.getItem('token');
 
     try {
       const response = await axios.post(`${API_URL}/tweets`, formData, {
@@ -75,19 +74,16 @@ const Home = () => {
       </div>
 
       <div className="tweets">
-        {/* if there are no tweets:   */}
         {tweets.length === 0 ? (
           <div className="no-tweets-info">
             <p>No tweets available.</p>
           </div>
         ) : (
-          // if there are tweets:
           tweets.map((tweet) => (
             <Tweet key={tweet._id} {...tweet} />
           ))
         )}
       </div>
-
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
