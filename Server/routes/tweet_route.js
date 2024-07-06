@@ -75,21 +75,6 @@ router.get('/user/:userId', protect, async (req, res) => {
   }
 });
 
-// Get tweets for the authenticated user
-router.get('/user', protect, async (req, res) => {
-  console.log("Reached /tweets/user route");
-  try {
-    console.log("reached authenticated user tweets");
-    const tweets = await Tweet.find({ tweetedBy: req.user._id })
-      .populate('tweetedBy', 'username name profilePic')
-      .sort({ date: -1 });
-    res.json(tweets);
-  } catch (error) {
-    console.error('Error fetching tweets for authenticated user:', req.user._id, error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
 
 
 // Like a tweet
