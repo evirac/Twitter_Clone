@@ -93,21 +93,17 @@ const UserProfile = () => {
         </div>
       </div>
       <div className="profile-details">
-        <div className="profile-picture">
-        </div>
+        <h2 className='profile-name'>{user.name}</h2>
+        <div className='profile-handle'>@{user.username}</div>
         <div className="profile-info">
-          <h2>{user.name}</h2>
-          <p>@{user.username}</p>
-          <p><FaMapMarkerAlt /> {user.location}</p>
-          <p><FaBirthdayCake /> {new Date(user.birthdate).toLocaleDateString()}</p>
-          <p><FaCalendarAlt /> Joined {new Date(user.createdAt).toLocaleDateString()}</p>
-          <p>{user.bio}</p>
+            <div><FaMapMarkerAlt /> {user.location}</div>
+            <div><FaBirthdayCake /> {new Date(user.dob).toLocaleDateString()}</div>
+            <div><FaCalendarAlt /> Joined {new Date(user.joined).toLocaleDateString()}</div>
+        </div>
           <div className="follow-info">
             <span>{user.following.length} Following</span>
             <span>{user.followers.length} Followers</span>
           </div>
-
-        </div>
       </div>
       <div className="tweets-section">
         {userTweets.map(tweet => (

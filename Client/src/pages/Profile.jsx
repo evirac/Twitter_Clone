@@ -134,7 +134,7 @@ const Profile = () => {
           <div><FaCalendarAlt /> Joined: {user.joined}</div>
           <div><FaMapMarkerAlt /> Location: {user.location}</div>
         </div>
-        <div className="profile-follow-stats">
+        <div className="follow-info">
           <span>{user.following.length} Following</span>
           <span>{user.followers.length} Followers</span>
         </div>
