@@ -26,6 +26,7 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
       content,
       image,
       tweetedBy: req.user._id,
+      isReply: false,
     });
 
     await newTweet.save();
@@ -40,7 +41,7 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
 // Get all tweets
 router.get('/', async (req, res) => {
   try {
-    const tweets = await Tweet.find().populate('tweetedBy', 'username name profilePic').sort({ date: -1 });
+    const tweets = await Tweet.find({ isReply: false }).populate('tweetedBy', 'username name profilePic').sort({ date: -1 });
     res.json(tweets);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
@@ -75,7 +76,49 @@ router.get('/user/:userId', protect, async (req, res) => {
   }
 });
 
+// Get replies for a specific tweet
+router.get('/:id/replies', async (req, res) => {
+  try {
+    const tweet = await Tweet.findById(req.params.id).populate({
+      path: 'replies',
+      populate: {
+        path: 'tweetedBy',
+        select: 'username name profilePic'
+      }
+    });
 
+    if (tweet) {
+      res.json(tweet.replies);
+    } else {
+      res.status(404).json({ message: 'Tweet not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Reply to a tweet
+router.post('/:id/replies', protect, async (req, res) => {
+  try {
+    const { content } = req.body;
+    const newReply = new Tweet({
+      content,
+      tweetedBy: req.user._id,
+      isReply: true,
+    });
+
+    await newReply.save();
+
+    const tweet = await Tweet.findById(req.params.id);
+    tweet.replies.push(newReply._id);
+    await tweet.save();
+
+    res.status(201).json(newReply);
+  } catch (err) {
+    console.error('Error posting reply:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 // Like a tweet
 router.put('/like/:id', protect, async (req, res) => {

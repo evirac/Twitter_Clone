@@ -1,7 +1,7 @@
 // src/components/Sidebar.jsx
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaHome, FaHashtag, FaBell, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import Image from 'react-bootstrap/Image';
 import '../sass/Sidebar.scss';
 import axios from 'axios';
@@ -22,8 +22,6 @@ const Sidebar = () => {
       </div>
       <div className="sidebar-menu">
         <SidebarItem icon={<FaHome />} text="Home" to="/" />
-        <SidebarItem icon={<FaHashtag />} text="Explore" to="/explore" />
-        {/* <SidebarItem icon={<FaBell />} text="Notifications" to="/notifications" /> */}
         <SidebarItem icon={<FaUser />} text="Profile" to="/profile" />
         <div className="sidebar-item" onClick={handleLogout}>
           <FaSignOutAlt />

@@ -19,7 +19,8 @@ const TweetSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  isReply: { type: Boolean, default: false },
 });
 
 const Tweet = mongoose.model('Tweet', TweetSchema);
