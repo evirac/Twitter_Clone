@@ -49,6 +49,14 @@ const Tweet = ({ _id, content, image, tweetedBy, date, likes, retweetBy, replies
     navigate(`/tweets/${_id}`);
   };
 
+  const handleProfileClick = () => {
+    if (tweetedBy._id === userId) {
+      navigate(`/profile`);
+    } else {
+      navigate(`/users/${tweetedBy._id}`);
+    }
+  };
+
   // to handle null values
   const profilePicUrl = tweetedBy?.profilePic ? `${API_URL}/${tweetedBy.profilePic}` : "/assets/default_user.jpg";
   const tweetedByUsername = tweetedBy?.username || 'Unknown_User';
@@ -63,7 +71,7 @@ const Tweet = ({ _id, content, image, tweetedBy, date, likes, retweetBy, replies
         )}
       <div className="tweet-header">
         <Image src={profilePicUrl} alt="Profile" className="tweet-profile-pic" />
-        <div className="tweet-info">
+        <div className="tweet-info" onClick={handleProfileClick}>
           <span className="tweet-name">{tweetedByName}</span> <span className="tweet-handle">@{tweetedByUsername}</span> <span className="tweet-date">· {new Date(date).toLocaleDateString()}</span>
         </div>
       </div>

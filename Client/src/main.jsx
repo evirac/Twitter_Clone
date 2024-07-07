@@ -11,6 +11,7 @@ import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import ProtectedRoute from './components/ProtectedRoute';
 import TweetDetails from './pages/TweetDetails.jsx';
+import UserProfile from './pages/UserProfile.jsx'
 
 const router = createBrowserRouter([
   {
@@ -36,7 +37,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/tweets/:id',
-        element: <TweetDetails />
+        element: <ProtectedRoute element={TweetDetails} />
+      },
+      {
+        path: '/users/:id',
+        element: <UserProfile />
       }
     ],
   },
