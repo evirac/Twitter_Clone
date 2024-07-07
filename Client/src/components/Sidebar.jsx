@@ -1,4 +1,3 @@
-// src/components/Sidebar.jsx
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaHome, FaUser, FaSignOutAlt } from 'react-icons/fa';
@@ -18,7 +17,7 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <Image src="assets/logo.svg" className="sidebar-logo" />
+        <Image src="/assets/logo.svg" className="sidebar-logo" />
       </div>
       <div className="sidebar-menu">
         <SidebarItem icon={<FaHome />} text="Home" to="/" />
