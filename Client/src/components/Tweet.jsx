@@ -10,7 +10,7 @@ const Tweet = ({ _id, content, image, tweetedBy, date, likes, retweetBy }) => {
   const user = JSON.parse(localStorage.getItem('user'));
   const userId = user ? user._id : null;
   const username = user ? user.username : null;
-  
+
   const [liked, setLiked] = useState(likes.includes(userId));
   const [retweeted, setRetweeted] = useState(retweetBy.includes(userId));
   const [likesCount, setLikesCount] = useState(likes.length);
@@ -48,6 +48,11 @@ const Tweet = ({ _id, content, image, tweetedBy, date, likes, retweetBy }) => {
 
   return (
     <div className="tweet">
+      {retweeted && (
+          <div className="retweet-label">
+            <FaRetweet /> Retweeted by {username}
+          </div>
+        )}
       <div className="tweet-header">
         <Image src={profilePicUrl} alt="Profile" className="tweet-profile-pic" />
         <div className="tweet-info">
@@ -67,11 +72,6 @@ const Tweet = ({ _id, content, image, tweetedBy, date, likes, retweetBy }) => {
           <FaRetweet className={`tweet-icon ${retweeted ? 'retweeted' : ''}`} /> {retweetsCount}
         </div>
       </div>
-      {retweeted && (
-        <div className="retweet-label">
-          Retweeted by {username}
-        </div>
-      )}
     </div>
   );
 };
