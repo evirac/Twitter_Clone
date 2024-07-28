@@ -14,7 +14,7 @@
 
 ## Introduction
 
-This project is a clone of Twitter, developed using MERN stack(MongoDb, Express.js, React.js, Node.js) . It includes features like user authentication, tweeting, following users, liking, and retweeting tweets. The project is divided into frontend (using react, sass and js) and backend (using express.js and node.js, and MongoDB as database).
+This project is a clone of Twitter, developed using MERN stack(MongoDb, Express.js, React.js, Node.js) . It includes features like user authentication, tweeting, following users, liking, and retweeting tweets. The project is divided into Client and Server which manages frontend (using react, sass and js) and backend (using express.js and node.js, and MongoDB as database) respectively.
 
 ## Features
 
@@ -56,19 +56,20 @@ This project is a clone of Twitter, developed using MERN stack(MongoDb, Express.
 
 ### Login Page
 
-![Login Page](path/to/login-screenshot.png)
+![Login Page](screenshots/LoginPage.png)
 
 ### Registration Page
 
-![Registration Page](path/to/register-screenshot.png)
+![Registration Page](screenshots/RegistrationPage.png)
 
 ### Home Page
 
-![Home Page](path/to/home-screenshot.png)
+![Home Page](screenshots/HomePage.png)
 
 ### Profile Page
 
-![Profile Page](path/to/profile-screenshot.png)
+![Profile Page](screenshots/ProfilePage.png)
+![Other person's Profile Page](screenshots/OtherPersonProfilePage.png.png)
 
 ## Installation
 
