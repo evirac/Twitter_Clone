@@ -8,6 +8,7 @@ import Alert from 'react-bootstrap/Alert';
 import '../sass/Profile.scss';
 import Tweet from '../components/Tweet';
 import axios from 'axios';
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Profile = () => {
@@ -32,14 +33,15 @@ const Profile = () => {
         setName(response.data.name);
         setDob(response.data.dob);
         setLocation(response.data.location);
+        fetchUserTweets(response.data._id); // Fetch tweets after fetching user profile
       } catch (err) {
         console.error('Failed to fetch user profile', err);
       }
     };
 
-    const fetchUserTweets = async () => {
+    const fetchUserTweets = async (userId) => {
       try {
-        const response = await axios.get(`${API_URL}/tweets/user`, {
+        const response = await axios.get(`${API_URL}/tweets/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserTweets(response.data);
@@ -49,7 +51,6 @@ const Profile = () => {
     };
 
     fetchUserProfile();
-    fetchUserTweets();
   }, []);
 
   const handleEditDetails = async () => {
@@ -82,7 +83,7 @@ const Profile = () => {
     const formData = new FormData();
     formData.append('profilePic', e.target.files[0]);
     const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
-  
+
     try {
       const response = await axios.put(`${API_URL}/users/profile/pic`, formData, {
         headers: {
@@ -90,7 +91,7 @@ const Profile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (response.data.profilePic) {
         setUser({ ...user, profilePic: response.data.profilePic });
       } else {
@@ -102,12 +103,12 @@ const Profile = () => {
       setShowUploadProfilePicModal(false); // Move this here to ensure it closes only after upload attempt
     }
   };
-  
-
 
   if (!user) {
     return <div>Loading...</div>;
   }
+
+  const profilePicUrl = user.profilePic ? `${API_URL}/${user.profilePic}` : "/assets/default_user.jpg";
 
   return (
     <div className="profile-page">
@@ -115,7 +116,7 @@ const Profile = () => {
       <div className="profile-cover">
         <div className="profile-header">
           <Image
-            src={`${API_URL}/${user.profilePic}` || "https://via.placeholder.com/150"}
+            src={profilePicUrl}
             roundedCircle
             className="profile-pic"
           />
@@ -133,16 +134,22 @@ const Profile = () => {
           <div><FaCalendarAlt /> Joined: {user.joined}</div>
           <div><FaMapMarkerAlt /> Location: {user.location}</div>
         </div>
-        <div className="profile-follow-stats">
+        <div className="follow-info">
           <span>{user.following.length} Following</span>
           <span>{user.followers.length} Followers</span>
         </div>
       </div>
       <div className="profile-tweets">
         <h3>Tweets & Replies</h3>
-        {userTweets.map((tweet) => (
-          <Tweet key={tweet._id} {...tweet} />
-        ))}
+        {userTweets.length === 0 ? (
+          <div className="no-tweets-info">
+            <p>You haven't posted any tweets yet.</p>
+          </div>
+        ) : (
+          userTweets.map((tweet) => (
+            <Tweet key={tweet._id} {...tweet} />
+          ))
+        )}
       </div>
 
       {/* Edit Details Modal */}
@@ -206,16 +213,13 @@ const Profile = () => {
           <Form>
             <Form.Group controlId="formProfilePic">
               <Form.Label>Profile Picture</Form.Label>
-              <Form.Control type="file" onChange={handleUploadProfilePic} />
+              <Form.Control type="file" accept="image/*" onChange={handleUploadProfilePic} />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowUploadProfilePicModal(false)}>
             Cancel
-          </Button>
-          <Button variant="primary" onClick={handleUploadProfilePic}>
-            Upload
           </Button>
         </Modal.Footer>
       </Modal>

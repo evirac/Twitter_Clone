@@ -4,13 +4,14 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './pages/Home.jsx';
-import Explore from './pages/Explore.jsx';
 import Profile from './pages/Profile.jsx';
 import Error from './pages/Error.jsx';
 import App from './App';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import ProtectedRoute from './components/ProtectedRoute';
+import TweetDetails from './pages/TweetDetails.jsx';
+import UserProfile from './pages/UserProfile.jsx'
 
 const router = createBrowserRouter([
   {
@@ -21,10 +22,6 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <ProtectedRoute element={Home} />,
-      },
-      {
-        path: 'explore',
-        element: <ProtectedRoute element={Explore} />,
       },
       {
         path: 'profile',
@@ -39,9 +36,13 @@ const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: '/explore',
-        element: <ProtectedRoute element={Explore} />,
+        path: '/tweets/:id',
+        element: <ProtectedRoute element={TweetDetails} />
       },
+      {
+        path: '/users/:id',
+        element: <UserProfile />
+      }
     ],
   },
 ]);

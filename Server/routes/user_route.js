@@ -141,4 +141,67 @@ router.put('/profile/pic', protect, upload.single('profilePic'), async (req, res
   }
 });
 
+// Follow a user
+router.post('/follow/:id', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const targetUser = await User.findById(req.params.id);
+
+    if (!user || !targetUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.following.includes(targetUser._id)) {
+      return res.status(400).json({ message: 'Already following this user' });
+    }
+
+    user.following.push(targetUser._id);
+    targetUser.followers.push(user._id);
+
+    await user.save();
+    await targetUser.save();
+
+    res.json({ message: 'User followed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Unfollow a user
+router.post('/unfollow/:id', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const targetUser = await User.findById(req.params.id);
+
+    if (!user || !targetUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.following = user.following.filter(id => id.toString() !== targetUser._id.toString());
+    targetUser.followers = targetUser.followers.filter(id => id.toString() !== user._id.toString());
+
+    await user.save();
+    await targetUser.save();
+
+    res.json({ message: 'User unfollowed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get another user's profile
+router.get('/:id', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).populate('followers').populate('following');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

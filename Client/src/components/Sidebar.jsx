@@ -1,7 +1,6 @@
-// src/components/Sidebar.jsx
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaHome, FaHashtag, FaBell, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import Image from 'react-bootstrap/Image';
 import '../sass/Sidebar.scss';
 import axios from 'axios';
@@ -18,12 +17,10 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <Image src="assets/logo.svg" className="sidebar-logo" />
+        <Image src="/assets/logo.svg" className="sidebar-logo" />
       </div>
       <div className="sidebar-menu">
         <SidebarItem icon={<FaHome />} text="Home" to="/" />
-        <SidebarItem icon={<FaHashtag />} text="Explore" to="/explore" />
-        <SidebarItem icon={<FaBell />} text="Notifications" to="/notifications" />
         <SidebarItem icon={<FaUser />} text="Profile" to="/profile" />
         <div className="sidebar-item" onClick={handleLogout}>
           <FaSignOutAlt />
@@ -67,10 +64,11 @@ const SidebarProfile = () => {
   if (!user) {
     return <div></div>;
   }
+  const profilePicUrl = user.profilePic ? `${API_URL}/${user.profilePic}` : "/assets/default_user.jpg";
 
   return (
     <div className="sidebar-profile">
-      <img src={`${API_URL}/${user.profilePic}` || "https://via.placeholder.com/40"} alt="Profile" />
+      <img src={profilePicUrl} alt="Profile" />
       <div className="profile-info">
         <div className="profile-name">{user.name}</div>
         <div className="profile-username">@{user.username}</div>

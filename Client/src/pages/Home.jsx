@@ -1,91 +1,108 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { FaImage } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 import '../sass/Home.scss';
 import Tweet from '../components/Tweet';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Home = () => {
-  const [show, setShow] = useState(false);
-  const [tweetText, setTweetText] = useState('');
-  const [tweetImage, setTweetImage] = useState(null);
-  const [tweets, setTweets] = useState([
-    {
-      id: 1,
-      name: 'ashwin',
-      profilePic: 'https://via.placeholder.com/40',
-      handle: '@ashwinravi99',
-      date: '11h',
-      content: 'This is a sample tweet #1',
-      image: 'https://via.placeholder.com/600x200',
-    },
-    {
-      id: 2,
-      name: 'gaurav',
-      profilePic: 'https://via.placeholder.com/40',
-      handle: '@user2',
-      date: 'Jun 24',
-      content: 'This is a sample tweet #2',
-      image: '',
-    },
-    // Add more tweets as needed
-  ]);
+  const [showModal, setShowModal] = useState(false);
+  const [newTweetContent, setNewTweetContent] = useState('');
+  const [newTweetImage, setNewTweetImage] = useState(null);
+  const [tweets, setTweets] = useState([]);
 
-  const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
-  const handleTweetTextChange = (e) => setTweetText(e.target.value);
-  const handleImageChange = (e) => setTweetImage(URL.createObjectURL(e.target.files[0]));
-
-  const handlePostTweet = () => {
-    const newTweet = {
-      id: tweets.length + 1,
-      profilePic: 'https://via.placeholder.com/40',
-      name: 'newuser',
-      handle: '@newuser',
-      date: 'Now',
-      content: tweetText,
-      image: tweetImage,
+  useEffect(() => {
+    const fetchTweets = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/tweets`);
+        setTweets(response.data);
+      } catch (err) {
+        console.error('Failed to fetch tweets', err);
+      }
     };
-    setTweets([newTweet, ...tweets]);
-    setTweetText('');
-    setTweetImage(null);
-    handleClose();
-    toast.success('Tweet posted');
+
+    fetchTweets();
+  }, []);
+
+  const handleNewTweet = async () => {
+    if (!newTweetContent) {
+      toast.error('Tweet content is required');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('content', newTweetContent);
+    if (newTweetImage) {
+      formData.append('image', newTweetImage);
+    }
+    const token = localStorage.getItem('token');
+
+    try {
+      const response = await axios.post(`${API_URL}/tweets`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setTweets([response.data, ...tweets]);
+      setShowModal(false);
+      setNewTweetContent('');
+      setNewTweetImage(null);
+      toast.success('Tweet posted successfully');
+    } catch (err) {
+      console.error('Failed to post tweet', err);
+      toast.error('Failed to post tweet');
+    }
+  };
+
+  const handleImageChange = (e) => {
+    setNewTweetImage(e.target.files[0]);
   };
 
   return (
     <div className="home">
       <div className="home-header">
         <h2>Home</h2>
-        <Button className='me-2' variant="primary" onClick={handleShow}>
+        <Button className='me-2' variant="primary" onClick={() => setShowModal(true)}>
           Tweet
         </Button>
       </div>
-      {tweets.map((tweet) => (
-        <Tweet key={tweet.id} {...tweet} />
-      ))}
 
-      <Modal show={show} onHide={handleClose}>
+      <div className="tweets">
+        {tweets.length === 0 ? (
+          <div className="no-tweets-info">
+            <p>No tweets available.</p>
+          </div>
+        ) : (
+          tweets.map((tweet) => (
+            <Tweet key={tweet._id} {...tweet} />
+          ))
+        )}
+      </div>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>New Tweet</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="tweetText">
+            <Form.Group controlId="formTweetContent">
               <Form.Control
                 as="textarea"
                 rows={3}
                 placeholder="What's happening?"
-                value={tweetText}
-                onChange={handleTweetTextChange}
+                value={newTweetContent}
+                onChange={(e) => setNewTweetContent(e.target.value)}
               />
             </Form.Group>
-            {tweetImage && (
+            {newTweetImage && (
               <div className="image-preview-container">
-                <img src={tweetImage} alt="Selected" className="tweet-image-preview" />
+                <img src={URL.createObjectURL(newTweetImage)} alt="Selected" className="tweet-image-preview" />
               </div>
             )}
             <Form.Group controlId="formFile" className="mb-3">
@@ -97,10 +114,10 @@ const Home = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handlePostTweet}>
+          <Button variant="primary" onClick={handleNewTweet}>
             Tweet
           </Button>
         </Modal.Footer>
