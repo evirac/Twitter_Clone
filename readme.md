@@ -56,20 +56,20 @@ This project is a clone of Twitter, developed using MERN stack(MongoDb, Express.
 
 ### Login Page
 
-![Login Page](screenshots/LoginPage.png)
+![Login Page](Screenshots/LoginPage.png)
 
 ### Registration Page
 
-![Registration Page](./screenshots/RegistrationPage.png)
+![Registration Page](Screenshots/RegistrationPage.png)
 
 ### Home Page
 
-![Home Page](./screenshots/HomePage.png)
+![Home Page](Screenshots/HomePage.png)
 
 ### Profile Page
 
-![Profile Page](./screenshots/ProfilePage.png)
-![Other person's Profile Page](./screenshots/OtherPersonProfilePage.png.png)
+![Profile Page](Screenshots/ProfilePage.png)
+![Other person's Profile Page](Screenshots/OtherPersonProfilePage.png.png)
 
 ## Installation
 
