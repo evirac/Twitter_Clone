@@ -9,8 +9,6 @@
 - [Usage](#usage)
 - [Backend](#backend)
 - [Frontend](#frontend)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
@@ -69,7 +67,7 @@ This project is a clone of Twitter, developed using MERN stack(MongoDb, Express.
 ### Profile Page
 
 ![Profile Page](Screenshots/ProfilePage.png)
-![Other person's Profile Page](Screenshots/OtherPersonProfilePage.png.png)
+![Other person's Profile Page](Screenshots/OtherPersonProfilePage.png)
 
 ## Installation
 
@@ -80,3 +78,72 @@ To run this project locally, follow these steps:
    git clone https://github.com/yourusername/twitter-clone.git
    cd twitter-clone
    ```
+2. **Install backend dependencies**:
+   ```bash
+   cd Server
+   npm install
+   ```
+3. **Install frontend dependencies**:
+   ```bash
+   cd Client
+   npm install
+   ```
+4. **Set up environment variables**:
+   ```bash
+   cd Client
+   npm install
+   ```
+5. **Set up environment variables**:
+
+   - Create a .env file in the backend directory with the following variables:
+     .env:
+
+   ```makefile
+       MONGO_URI=your_mongodb_uri
+       JWT_SECRET=your_jwt_secret
+   ```
+
+6. **Run the frontend**:
+
+   ```bash
+   cd Client
+   npm run dev
+   ```
+
+7. **Run the backend**:
+   ```bash
+   cd Server
+   npm start
+   ```
+
+## Backend
+
+The backend is built with Node.js and Express. It includes:
+
+- Routes: API endpoints for user and tweet management.
+- Controllers: Logic for handling requests and responses.
+- Models: Mongoose schemas for User and Tweet entities.
+- Middleware: JWT authentication middleware to protect routes.
+
+## Frontend
+
+The frontend is built with React and Redux. It includes:
+
+- Components: Reusable components for various parts of the application.
+- Pages: Different pages like Home, Explore, Login, Register, and Profile.
+- State Management: Used useState for local state management in React components.
+- Styling: Used Sass for custom styles and Bootstrap for responsive design and components.
+
+### Main Components and Pages
+
+- App.jsx: Main application component.
+- Home.jsx: Homepage displaying tweets.
+- Explore.jsx: Explore page to discover new tweets.
+- Login.jsx: Login page for user authentication.
+- Register.jsx: Registration page for new users.
+- Profile.jsx: User profile page.
+
+### Styling
+
+- Sass: Used for custom styling.
+- Bootstrap: Used for responsive design and prebuilt components.
