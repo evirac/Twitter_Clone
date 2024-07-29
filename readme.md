@@ -84,16 +84,13 @@ To run this project locally, follow these steps:
    npm install
    ```
 3. **Install frontend dependencies**:
+
    ```bash
    cd Client
    npm install
    ```
+
 4. **Set up environment variables**:
-   ```bash
-   cd Client
-   npm install
-   ```
-5. **Set up environment variables**:
 
    - Create a .env file in the backend directory with the following variables:
      .env:
@@ -103,14 +100,14 @@ To run this project locally, follow these steps:
        JWT_SECRET=your_jwt_secret
    ```
 
-6. **Run the frontend**:
+5. **Run the frontend**:
 
    ```bash
    cd Client
    npm run dev
    ```
 
-7. **Run the backend**:
+6. **Run the backend**:
    ```bash
    cd Server
    npm start
