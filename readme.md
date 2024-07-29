@@ -75,7 +75,7 @@ To run this project locally, follow these steps:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/twitter-clone.git
+   git clone https://github.com/evirac/twitter-clone.git
    cd twitter-clone
    ```
 2. **Install backend dependencies**:
@@ -127,7 +127,7 @@ The backend is built with Node.js and Express. It includes:
 
 ## Frontend
 
-The frontend is built with React and Redux. It includes:
+The frontend is built with React. It includes:
 
 - Components: Reusable components for various parts of the application.
 - Pages: Different pages like Home, Explore, Login, Register, and Profile.
